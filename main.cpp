@@ -65,14 +65,14 @@ string convertToLower_And_Sort(string word)
 
 int main(int argc, char *argv[])
 {
-    if(argc != 2)
+    if(argc != 3)
     {
         cout << "Add a dictionary on input." << endl;
         return -1;
     }
 
     multimap<string, string> multimapOfDictionary;
-    string nameOfDictionary = argv[1];
+    string nameOfDictionary = argv[2];
 
     ifstream dictionary(nameOfDictionary.c_str(), ios::in);
 
