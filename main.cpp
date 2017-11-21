@@ -42,26 +42,6 @@ std::istream &safeGetline(std::istream &is, std::string &t) {
     }
 }
 
-string convertToLower_And_Sort(string word)
-{
-    list<char> listOfChar;
-    char character;
-
-    for(string::iterator i = word.begin(); i != word.end(); ++i)
-    {
-        character = tolower(*i);
-        if (character >= 'a' && character <= 'z')
-            listOfChar.push_back(character);
-    }
-
-    listOfChar.sort();
-
-    stringstream streamString;
-    for(list<char>::iterator i = listOfChar.begin(); i != listOfChar.end(); ++i)
-        streamString << *i;
-
-    return streamString.str();
-}
 
 int main(int argc, char *argv[])
 {
@@ -73,6 +53,7 @@ int main(int argc, char *argv[])
 
     multimap<string, string> multimapOfDictionary;
     string nameOfDictionary = argv[2];
+    string input;
 
     ifstream dictionary(nameOfDictionary.c_str(), ios::in);
 
@@ -84,18 +65,23 @@ int main(int argc, char *argv[])
     }
     else
     {
-        string line;
+        string line, lineConvert;
         while(!safeGetline(dictionary, line).eof())
         {
-            multimapOfDictionary.insert(pair<string,string>(convertToLower_And_Sort(line), line));
+            lineConvert = line;
+            transform(lineConvert.begin(), lineConvert.end(), lineConvert.begin(), ::tolower);
+            sort(lineConvert.begin(), lineConvert.end());
+            multimapOfDictionary.insert(pair<string,string>(lineConvert, line));
         }
     }
 
     while(true)
     {
-        string input;
         cin >> input;
-        input = convertToLower_And_Sort(input);
+        
+        //Conver & Sort
+        transform(input.begin(), input.end(), input.begin(), ::tolower);
+        sort(input.begin(), input.end());
 
         pair <multimap<string, string>::iterator, multimap<string, string>::iterator> pairIterator = multimapOfDictionary.equal_range(input);
 
@@ -104,8 +90,6 @@ int main(int argc, char *argv[])
             cout << i->second << endl;
         }
     }
-
-    dictionary.close();
 
     return 0;
 }
